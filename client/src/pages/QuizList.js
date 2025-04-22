@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import "../styles/quizList.css";
 
-const API_URL = "https://quiz-application-main.onrender.com";
+
 
 const QuizList = () => {
   const { user } = useAuth();
@@ -63,14 +63,14 @@ const QuizList = () => {
   const fetchAllQuizzes = async () => {
     try {
       // Fetch available quizzes
-      const availableResponse = await fetch(`${API_URL}/quiz/all`, {
+      const availableResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/quiz/all`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       });
 
       // Fetch attempted quizzes
-      const attemptedResponse = await fetch(`${API_URL}/quiz/attempted`, {
+      const attemptedResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/quiz/attempted`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },

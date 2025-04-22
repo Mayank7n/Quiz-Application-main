@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
-const API_URL = "https://quiz-application-main.onrender.com/ "; // Updated port to match server
+
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);

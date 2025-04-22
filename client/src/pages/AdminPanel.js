@@ -56,7 +56,7 @@ const AdminPanel = () => {
   const handleDeleteQuiz = async (quizId) => {
     if (!window.confirm("Are you sure you want to delete this quiz?")) return;
     try {
-      const res = await fetch(`${API_URL}/admin/quiz/${quizId}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/quiz/${quizId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${user.token}` },
       });
