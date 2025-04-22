@@ -22,7 +22,7 @@ const SignupPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://quiz-application-main.onrender.com", formData);
+      const res = await axios.post("http://localhost:5000/api/auth/signup", formData);
       alert(res.data.message); // Show success message
       navigate("/login"); // Redirect to login
     } catch (err) {
