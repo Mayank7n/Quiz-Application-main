@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import "../styles/quizList.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://quiz-application-main.onrender.com";
 
 const QuizList = () => {
   const { user } = useAuth();
