@@ -1,0 +1,133 @@
+/* Ranking & Leaderboard Styles */
+.ranking-container {
+  text-align: center;
+  padding: 60px 20px 40px 20px;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.ranking-title {
+  font-size: 2.6rem;
+  font-weight: bold;
+  color: #c0392b;
+  margin-bottom: 2.2rem;
+  letter-spacing: 2px;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+
+.quiz-card {
+  background: rgba(169, 38, 196, 0.115);
+  color: #2c3e50;
+  padding: 20px 30px;
+  border-radius: 12px;
+  width: 250px;
+  max-width: 95vw;
+  margin: 16px auto;
+  box-shadow: 0 4px 12px rgba(192,57,43,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s;
+}
+.quiz-card:hover {
+  box-shadow: 0 8px 24px rgba(192,57,43,0.14);
+}
+
+.leaderboard-modal {
+  background: #eda7045e;
+  border-radius: 16px;
+  width: 400px;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+  padding: 32px 20px 24px 20px;
+  max-width: 420px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+.leaderboard-title {
+  font-size: 2rem;
+  color: #0e0e0e;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+.user-rank-highlight {
+  background: rgba(202, 116, 217, 0.316);
+  border-radius: 8px;
+  padding: 12px 10px;
+  margin-bottom: 18px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0b0b0b;
+  box-shadow: 0 2px 8px rgba(192,57,43,0.08);
+}
+
+.leaderboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.leaderboard-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f3ccccff;
+  font-size: 1.08rem;
+  color: #2c3e50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.leaderboard-list li:last-child {
+  border-bottom: none;
+}
+
+.rank-badge {
+  background: #0c0c0c;
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.leaderboard-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #c0392b;
+  cursor: pointer;
+}
+.leaderboard-close:hover{
+  background-color: #0b0b0b;
+}
+span{
+  color: black;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 60px;
+}
+
+@media (max-width: 500px) {
+  .quiz-card, .leaderboard-modal {
+    padding: 16px 6px;
+    width: 98vw;
+  }
+  .ranking-title {
+    font-size: 1.6rem;
+  }
+}

@@ -1,0 +1,241 @@
+/* Root Variables for Theme Colors */
+:root {
+  --primary-color: #ffcc00;
+  --primary-dark: #cc9900;
+  --text-color: #ffffff;
+  --text-light: #ffe680;
+  --box-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --background-color: #121212; /* Optional for full dark layout */
+}
+
+
+/* Navbar Container */
+.navbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 3vw, 2rem);
+background: linear-gradient(to right, #2f2f2f, #3a3a3a); /* dull black gradient */
+position: sticky;
+top: 0;
+z-index: 1000;
+margin: 0px; /* removed margin to eliminate background gap */
+/* border-radius: 20px; keeping the smooth round look */
+box-shadow: var(--box-shadow-md);
+backdrop-filter: blur(8px);
+height: 30px;
+}
+
+
+/* Logo */
+.logo {
+font-size: clamp(1.4rem, 3vw, 2rem);
+color: var(--text-color);
+font-weight: 700;
+text-decoration: none;
+transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.logo:hover {
+color: var(--text-light);
+transform: scale(1.05);
+}
+
+/* Navigation Links */
+.nav-links {
+display: flex;
+align-items: center;
+gap: clamp(1rem, 2vw, 2.5rem);
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+.nav-links a {
+position: relative;
+color: var(--text-color);
+text-decoration: none;
+font-size: clamp(1rem, 2vw, 1.1rem);
+padding: 0.6rem 1.2rem;
+border-radius: 10px;
+transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+background-color: rgba(255, 255, 255, 0.15);
+color: var(--primary-color);
+}
+
+.nav-links a::after {
+content: '';
+position: absolute;
+bottom: 5px;
+left: 50%;
+width: 0;
+height: 2px;
+background-color: var(--primary-color);
+transition: all 0.3s ease;
+transform: translateX(-50%);
+}
+
+.nav-links a:hover::after {
+width: 60%;
+}
+
+/* Button Base Styles */
+.button {
+font-size: clamp(0.9rem, 2vw, 1rem);
+padding: 0.6rem 1.2rem;
+border-radius: 8px;
+font-weight: 500;
+cursor: pointer;
+border: none;
+transition: all 0.3s ease;
+}
+
+/* Logout Button */
+.logout-btn {
+background-color: #ff4d4d;
+color: white;
+}
+
+.logout-btn:hover {
+background-color: #e60000;
+transform: translateY(-2px);
+box-shadow: var(--box-shadow-md);
+}
+
+/* Admin Button */
+.admin-btn {
+background-color: #ff5722;
+color: white;
+}
+
+.admin-btn:hover {
+background-color: var(--primary-dark);
+transform: translateY(-2px);
+box-shadow: var(--box-shadow-md);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+background: none;
+border: none;
+color: var(--text-light);
+font-size: 1.5rem;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 0.5rem;
+cursor: pointer;
+transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+transform: rotate(15deg) scale(1.15);
+}
+
+/* Dark Mode */
+.navbar.dark {
+background: linear-gradient(90deg, #1a1a1a, #333);
+}
+
+.dark-mode {
+background-color: #121212;
+color: white;
+}
+
+/* Mobile Menu Icon */
+.menu-icon {
+display: none;
+font-size: 2rem;
+color: white;
+background: none;
+border: none;
+padding: 0.5rem;
+cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+.nav-links {
+  gap: 1rem;
+}
+}
+
+@media (max-width: 768px) {
+.menu-icon {
+  display: block;
+}
+
+.nav-links {
+  position: fixed;
+  top: 90px;
+  right: -100%;
+  flex-direction: column;
+  background: linear-gradient(to bottom right, rgba(24,24,24,0.85), rgba(35,35,35,0.78));
+  width: 80%;
+  max-width: 300px;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: var(--box-shadow-md);
+  transition: right 0.3s ease;
+  gap: 1.2rem;
+}
+
+.nav-links.active {
+  right: 1rem;
+}
+
+.nav-links a,
+.logout-btn,
+.admin-btn {
+  width: 100%;
+  text-align: center;
+}
+}
+
+@media (max-width: 480px) {
+.navbar {
+  padding: 0.8rem;
+  margin: 0.5rem;
+}
+
+.logo {
+  font-size: 1.3rem;
+}
+
+.nav-links {
+  width: 90%;
+  padding: 1.5rem;
+}
+
+.nav-links a,
+.logout-btn,
+.admin-btn {
+  font-size: 1rem;
+  padding: 0.8rem;
+}
+}
+
+@media (max-width: 360px) {
+.navbar {
+  padding: 0.6rem;
+  margin: 0.3rem;
+}
+
+.logo {
+  font-size: 1.1rem;
+}
+
+.nav-links {
+  padding: 1rem;
+}
+
+.nav-links a,
+.logout-btn,
+.admin-btn {
+  font-size: 0.9rem;
+  padding: 0.7rem;
+}
+}

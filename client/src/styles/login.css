@@ -1,0 +1,191 @@
+/* Global Styles */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0984e3, #6c5ce7);
+    padding: 2rem;
+    overflow-x: hidden;
+}
+
+/* Login Box */
+.auth-box {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0px 25px 60px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: min(90%, 420px);
+    animation: fadeInEffect 0.8s ease-in-out forwards;
+    transition: transform 0.3s ease;
+}
+
+.auth-box:hover {
+    transform: scale(1.015);
+}
+
+/* Fade In Effect */
+@keyframes fadeInEffect {
+    0% {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Heading */
+.auth-box h2 {
+    color: #2d3436;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    animation: slideUp 0.6s ease-in-out 0.3s forwards;
+    opacity: 0;
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.8rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.6rem;
+    color: #34495e;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.85rem;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.form-group input:focus {
+    border-color: #6c5ce7;
+    box-shadow: 0 0 10px rgba(108, 92, 231, 0.25);
+    background-color: #fff;
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    box-shadow: 0 8px 25px rgba(108, 92, 231, 0.2);
+}
+
+.submit-btn:hover {
+    background: #8e8ff5;
+    transform: translateY(-3px);
+}
+
+.submit-btn:active {
+    transform: translateY(2px);
+}
+
+/* Switch Link */
+.switch-link {
+    margin-top: 1.2rem;
+    color: #555;
+    font-size: 1rem;
+}
+
+.switch-link a {
+    color: #6c5ce7;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.switch-link a:hover {
+    background-color: rgba(108, 92, 231, 0.1);
+}
+
+/* Forgot Password / Sign Up Links */
+.auth-container p {
+    margin-top: 12px;
+    font-size: 15px;
+    opacity: 0;
+    animation: fadeInText 0.5s ease-in-out 0.5s forwards;
+    color: #444;
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.auth-container a {
+    color: #6c5ce7;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.auth-container a:hover {
+    color: #a29bfe;
+}
+
+/* Error Message */
+.error-message {
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.08);
+    border-left: 4px solid #e74c3c;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .auth-box {
+        padding: 1.5rem;
+    }
+
+    .form-group label,
+    .form-group input,
+    .submit-btn,
+    .switch-link {
+        font-size: 0.95rem;
+    }
+}

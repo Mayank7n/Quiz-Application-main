@@ -1,0 +1,153 @@
+:root {
+  --primary-color: #e63946;         /* vibrant red */
+  --primary-dark: #c21825;
+  --secondary-color: #f1faee;       /* light background shade */
+  --highlight-color: #ffdd57;       /* soft yellow */
+  --danger-color: #ff4d4d;
+  --danger-dark: #e60000;
+  --text-color: #ffffff;            /* white text for better contrast */
+  --card-glass: rgba(0, 0, 0, 0.8); /* darker glass effect */
+  --box-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2); /* stronger shadow */
+  --background-color: #2d2d2d;     /* dark background */
+}
+
+/* Home Container */
+.home-container {
+  text-align: center;
+  padding: clamp(3rem, 5vw, 4rem) 1.5rem;
+  background: linear-gradient(to right, #333333, #444444); /* darker gradient */
+  min-height: 100vh;
+  /* border-radius: 20px; */
+  box-shadow: var(--box-shadow-md);
+  color: var(--text-color);
+}
+
+/* Hero Title */
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+span{
+  color: var(--highlight-color);
+}
+/* Card Section */
+.cards-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+/* Individual Card */
+.card {
+  background: var(--card-glass);
+  backdrop-filter: blur(6px);
+  padding: 1.5rem;
+  border-radius: 16px;
+  width: 260px;
+  text-align: center;
+  box-shadow: var(--box-shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: var(--text-color);
+  border: 1px solid #666; /* Darker border */
+}
+
+.card:nth-child(1) {
+  background: linear-gradient(135deg, #ff7b7b, #ff4d4d);
+}
+.card:nth-child(2) {
+  background: linear-gradient(135deg, #7b7bff, #4d4dff);
+}
+.card:nth-child(3) {
+  background: linear-gradient(135deg, #ffecb3, #ffd54f);
+}
+.card:nth-child(4) {
+  background: linear-gradient(135deg, #c2ffd8, #a2fcfb);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow */
+}
+
+.card h3 {
+  margin-top: 0.5rem;
+  font-size: 1.3rem;
+  color: black;
+}
+
+/* Start Quiz Section */
+.start-quiz-container {
+  margin-top: 3rem;
+}
+
+.start-quiz-btn {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.9rem 2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: var(--box-shadow-md);
+}
+
+.start-quiz-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+  color: var(--highlight-color);
+}
+
+/* Button Container */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Create Quiz Button */
+.create-quiz-btn {
+  background: var(--danger-color);
+  color: white;
+  padding: 0.9rem 2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--box-shadow-md);
+}
+
+.create-quiz-btn:hover {
+  background: var(--danger-dark);
+  transform: scale(1.05);
+  color: var(--highlight-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cards-container {
+    gap: 1.2rem;
+  }
+
+  .card {
+    width: 90%;
+  }
+
+  .btn-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
