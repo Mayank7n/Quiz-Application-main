@@ -7,8 +7,8 @@ const { verifyAdmin } = require("../middleware/authMiddleware");
 // Get all quizzes created by admin
 router.get("/quizzes", verifyAdmin, async (req, res) => {
   try {
-    // Only quizzes created by this admin
-    const quizzes = await Quiz.find({ createdBy: req.user.id }).sort({ createdAt: -1 });
+    // Show all quizzes to any admin
+    const quizzes = await Quiz.find().sort({ createdAt: -1 });
     res.json(quizzes);
   } catch (error) {
     console.error("Admin Get Quizzes Error:", error);

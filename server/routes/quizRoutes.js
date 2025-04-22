@@ -35,19 +35,50 @@ router.post("/create", verifyAdmin, async (req, res) => {
 router.get("/all", verifyToken, async (req, res) => {
   try {
     const User = require('../models/User');
+    console.log("[QUIZ/ALL] req.user:", req.user);
+    if (!req.user || !req.user.id) {
+      console.error("[QUIZ/ALL] req.user or req.user.id is missing");
+      return res.status(400).json({ message: "Invalid user in token" });
+    }
     // Find all quiz attempts by the user
     const attempts = await QuizResult.find({ user: req.user.id }).select('quiz');
-    const attemptedQuizIds = attempts.map(attempt => attempt.quiz.toString());
+    console.log("[QUIZ/ALL] attempts:", attempts);
+    const attemptedQuizIds = attempts ? attempts.map(attempt => attempt.quiz.toString()) : [];
     const user = await User.findById(req.user.id);
-    const terminatedQuizIds = user.terminatedQuizzes.map(id => id.toString());
+    console.log("[QUIZ/ALL] user:", user);
+    if (!user) {
+      console.error("[QUIZ/ALL] User not found for id:", req.user.id);
+      return res.status(404).json({ message: "User not found" });
+    }
+    const terminatedQuizIds = (user.terminatedQuizzes || []).map(id => id.toString());
+    console.log("[QUIZ/ALL] terminatedQuizIds:", terminatedQuizIds);
     // Find all quizzes that haven't been attempted or terminated by the user
     const quizzes = await Quiz.find({
       _id: { $nin: [...attemptedQuizIds, ...terminatedQuizIds] }
     }).sort({ createdAt: -1 });
+    console.log("[QUIZ/ALL] Returning quizzes:", quizzes);
     res.json(quizzes);
   } catch (error) {
-    console.error("Get Quizzes Error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Get Quizzes Error (Detailed):", error);
+    res.status(500).json({ message: "Server error", error: error.message, stack: error.stack });
+  }
+});
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      console.error("[QUIZ/ALL] User not found for id:", req.user.id);
+      return res.status(404).json({ message: "User not found" });
+    }
+    // If terminatedQuizzes is missing, default to empty array
+    const terminatedQuizIds = (user.terminatedQuizzes || []).map(id => id.toString());
+    // Find all quizzes that haven't been attempted or terminated by the user
+    const quizzes = await Quiz.find({
+      _id: { $nin: [...attemptedQuizIds, ...terminatedQuizIds] }
+    }).sort({ createdAt: -1 });
+    console.log("[QUIZ/ALL] Returning quizzes:", quizzes);
+    res.json(quizzes);
+  } catch (error) {
+    console.error("Get Quizzes Error (Detailed):", error);
+    res.status(500).json({ message: "Server error", error: error.message, stack: error.stack });
   }
 });
 
@@ -57,7 +88,11 @@ router.get("/attempted", verifyToken, async (req, res) => {
   try {
     const User = require('../models/User');
     const user = await User.findById(req.user.id);
-    const terminatedQuizIds = user.terminatedQuizzes.map(id => id.toString());
+    if (!user) {
+      console.error("[QUIZ/ATTEMPTED] User not found for id:", req.user.id);
+      return res.status(404).json({ message: "User not found" });
+    }
+    const terminatedQuizIds = (user.terminatedQuizzes || []).map(id => id.toString());
     const results = await QuizResult.find({ user: req.user.id })
       .populate('quiz', 'title questions') // Populate quiz details
       .sort({ completedAt: -1 });
@@ -182,7 +217,11 @@ router.get("/attempted", verifyToken, async (req, res) => {
   try {
     const User = require('../models/User');
     const user = await User.findById(req.user.id);
-    const terminatedQuizIds = user.terminatedQuizzes.map(id => id.toString());
+    if (!user) {
+      console.error("[QUIZ/ATTEMPTED] User not found for id:", req.user.id);
+      return res.status(404).json({ message: "User not found" });
+    }
+    const terminatedQuizIds = (user.terminatedQuizzes || []).map(id => id.toString());
     const results = await QuizResult.find({ user: req.user.id })
       .populate('quiz', 'title questions') // Populate quiz details
       .sort({ completedAt: -1 });

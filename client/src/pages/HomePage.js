@@ -44,10 +44,18 @@ const Home = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_URL}/admin/quizzes`, {
+      const res = await fetch(`${API_URL}/api/admin/quizzes`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      if (!res.ok) throw new Error("Failed to fetch quizzes");
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Failed to fetch quizzes: ${text}`);
+      }
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        throw new Error(`Expected JSON, got: ${text}`);
+      }
       const data = await res.json();
       setQuizzes(data);
       // Fetch attempt counts for each quiz

@@ -1,3 +1,4 @@
+import API_URL from '../config';
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -42,8 +43,6 @@ const QuizList = () => {
     setLoading(true);
     setError("");
     try {
-import API_URL from '../config';
-
       const res = await fetch(`${API_URL}/api/admin/quizzes`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
@@ -84,7 +83,17 @@ import API_URL from '../config';
         const attemptedError = await attemptedResponse.text();
         throw new Error(`Failed to fetch quizzes: ${availableError} - ${attemptedError}`);
       }
-
+      // Defensive content-type check for available quizzes
+      const availableContentType = availableResponse.headers.get("content-type");
+      if (!availableContentType || !availableContentType.includes("application/json")) {
+        const text = await availableResponse.text();
+        throw new Error(`Expected JSON for available quizzes, got: ${text}`);
+      }
+      const attemptedContentType = attemptedResponse.headers.get("content-type");
+      if (!attemptedContentType || !attemptedContentType.includes("application/json")) {
+        const text = await attemptedResponse.text();
+        throw new Error(`Expected JSON for attempted quizzes, got: ${text}`);
+      }
       const availableData = await availableResponse.json();
       const attemptedData = await attemptedResponse.json();
 

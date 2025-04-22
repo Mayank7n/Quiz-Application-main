@@ -29,6 +29,11 @@ const Ranking = () => {
         headers: { Authorization: `Bearer ${user?.token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch attempted quizzes");
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        throw new Error(`Expected JSON, got: ${text}`);
+      }
       const data = await res.json();
       // Flatten attempted quizzes so each quiz has _id and title at top level
       setQuizzes(
@@ -53,6 +58,11 @@ const Ranking = () => {
         headers: { Authorization: `Bearer ${user?.token}` },
       });
       if (!res.ok) throw new Error("Failed to load leaderboard");
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        throw new Error(`Expected JSON, got: ${text}`);
+      }
       const data = await res.json();
       setLeaderboardData(data);
     } catch (err) {
