@@ -20,7 +20,7 @@ const popVariants = {
   }),
 };
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://quiz-application-backend-khwa.onrender.com/api";
 
 const Home = () => {
   const { user } = useAuth();

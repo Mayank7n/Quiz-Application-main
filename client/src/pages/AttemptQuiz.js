@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import "../styles/attemptQuiz.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://quiz-application-backend-khwa.onrender.com/api";
 
 const AttemptQuiz = () => {
   // Timer state
