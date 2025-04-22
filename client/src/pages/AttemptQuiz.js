@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import "../styles/attemptQuiz.css";
 
-const API_URL = "https://quiz-application-backend-khwa.onrender.com/api";
+const API_URL = "http://localhost:5000/api";
 
 const AttemptQuiz = () => {
   // Timer state
@@ -77,9 +77,14 @@ const AttemptQuiz = () => {
       setTerminated(true);
       setTerminationReason("Quiz terminated: Copying or cheating detected.");
       setScore(0);
-      localStorage.setItem(`quiz_terminated_${id}`, 'true');
-      window.dispatchEvent(new Event('quizTerminated'));
-      window.dispatchEvent(new Event('storage'));
+      // Mark quiz as terminated for this user in backend
+      fetch(`${API_URL}/quiz/terminate/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
       exitFullscreen();
     };
     // Window/tab switch or fullscreen exit
@@ -88,9 +93,9 @@ const AttemptQuiz = () => {
         setTerminated(true);
         setTerminationReason("Quiz terminated: Switched window or minimized.");
         setScore(0);
+        // Only set terminated flag for this user
         localStorage.setItem(`quiz_terminated_${id}`, 'true');
         localStorage.removeItem(`availableQuizzes`);
-        window.dispatchEvent(new Event('storage'));
         exitFullscreen();
       }
     };
@@ -99,9 +104,9 @@ const AttemptQuiz = () => {
         setTerminated(true);
         setTerminationReason("Quiz terminated: Exited full screen mode.");
         setScore(0);
+        // Only set terminated flag for this user
         localStorage.setItem(`quiz_terminated_${id}`, 'true');
         localStorage.removeItem(`availableQuizzes`);
-        window.dispatchEvent(new Event('storage'));
         exitFullscreen();
       }
     };

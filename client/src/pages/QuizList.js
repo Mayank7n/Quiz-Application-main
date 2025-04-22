@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import "../styles/quizList.css";
 
-const API_URL = "https://quiz-application-backend-khwa.onrender.com/api";
+const API_URL = "http://localhost:5000/api";
 
 const QuizList = () => {
   const { user } = useAuth();
@@ -16,8 +16,8 @@ const QuizList = () => {
   // DEBUG: show user and loading info in the UI
   console.log('QuizList user:', user, 'loading:', loading);
 
-  // Filter out terminated quizzes from availableQuizzes
-  const filteredAvailableQuizzes = availableQuizzes.filter(quiz => !localStorage.getItem(`quiz_terminated_${quiz._id}`));
+  // No localStorage filtering needed; backend filters terminated quizzes per user
+  const filteredAvailableQuizzes = availableQuizzes;
 
   useEffect(() => {
     if (user && user.role === 'admin') {
@@ -42,7 +42,7 @@ const QuizList = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch('https://quiz-application-backend-khwa.onrender.com/api/admin/quizzes', {
+      const res = await fetch('http://localhost:5000/api/admin/quizzes', {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -132,7 +132,7 @@ const QuizList = () => {
                       onClick={async () => {
                         if (!window.confirm('Are you sure you want to delete this quiz?')) return;
                         try {
-                          const res = await fetch(`https://quiz-application-backend-khwa.onrender.com/api/admin/quiz/${quiz._id}`, {
+                          const res = await fetch(`http://localhost:5000/api/admin/quiz/${quiz._id}`, {
                             method: 'DELETE',
                             headers: { Authorization: `Bearer ${user.token}` },
                           });

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import "../styles/ranking.css";
 
-const API_URL = "https://quiz-application-backend-khwa.onrender.com/api";
+const API_URL = "http://localhost:5000/api";
 
 const Ranking = () => {
   const { user } = useAuth();
