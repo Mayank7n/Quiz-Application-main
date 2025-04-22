@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
-const API_URL = "https://quiz-application-main.onrender.com"; // Updated port to match server
+const API_URL = "https://quiz-application-main.onrender.com/ "; // Updated port to match server
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password, role) => {
     try {
       setError(null);
-      const res = await fetch(`${API_URL}/api/auth/login`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

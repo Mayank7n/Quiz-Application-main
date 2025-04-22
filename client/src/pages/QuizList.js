@@ -42,7 +42,7 @@ const QuizList = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch('http://localhost:5000/api/admin/quizzes', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/quizzes`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -132,7 +132,7 @@ const QuizList = () => {
                       onClick={async () => {
                         if (!window.confirm('Are you sure you want to delete this quiz?')) return;
                         try {
-                          const res = await fetch(`http://localhost:5000/api/admin/quiz/${quiz._id}`, {
+                          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/quiz/${quiz._id}`, {
                             method: 'DELETE',
                             headers: { Authorization: `Bearer ${user.token}` },
                           });
