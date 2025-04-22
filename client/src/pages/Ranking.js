@@ -1,3 +1,4 @@
+import API_URL from '../config';
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import "../styles/ranking.css";

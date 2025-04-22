@@ -1,3 +1,4 @@
+import API_URL from '../config';
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -78,6 +79,8 @@ const AttemptQuiz = () => {
       setTerminationReason("Quiz terminated: Copying or cheating detected.");
       setScore(0);
       // Mark quiz as terminated for this user in backend
+import API_URL from '../config';
+
       fetch(`${API_URL}/quiz/terminate/${id}`, {
         method: "POST",
         headers: {

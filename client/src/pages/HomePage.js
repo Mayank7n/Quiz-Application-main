@@ -1,3 +1,4 @@
+import API_URL from '../config';
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Clock, Users, Shield } from "lucide-react";

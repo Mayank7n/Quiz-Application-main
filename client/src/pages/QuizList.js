@@ -42,7 +42,9 @@ const QuizList = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/quizzes`, {
+import API_URL from '../config';
+
+      const res = await fetch(`${API_URL}/api/admin/quizzes`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -63,14 +65,14 @@ const QuizList = () => {
   const fetchAllQuizzes = async () => {
     try {
       // Fetch available quizzes
-      const availableResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/quiz/all`, {
+      const availableResponse = await fetch(`${API_URL}/api/quiz/all`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       });
 
       // Fetch attempted quizzes
-      const attemptedResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/quiz/attempted`, {
+      const attemptedResponse = await fetch(`${API_URL}/api/quiz/attempted`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -132,7 +134,7 @@ const QuizList = () => {
                       onClick={async () => {
                         if (!window.confirm('Are you sure you want to delete this quiz?')) return;
                         try {
-                          const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/quiz/${quiz._id}`, {
+                          const res = await fetch(`${API_URL}/api/admin/quiz/${quiz._id}`, {
                             method: 'DELETE',
                             headers: { Authorization: `Bearer ${user.token}` },
                           });

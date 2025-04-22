@@ -1,3 +1,4 @@
+import API_URL from '../config';
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +29,7 @@ const AdminPanel = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/quizzes`, {
+      const res = await fetch(`${API_URL}/api/admin/quizzes`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch quizzes");
@@ -38,7 +39,7 @@ const AdminPanel = () => {
       const counts = {};
       await Promise.all(
         data.map(async (quiz) => {
-          const resp = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/quiz/${quiz._id}/attempts`, {
+          const resp = await fetch(`${API_URL}/api/admin/quiz/${quiz._id}/attempts`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
           const result = await resp.json();
@@ -56,7 +57,7 @@ const AdminPanel = () => {
   const handleDeleteQuiz = async (quizId) => {
     if (!window.confirm("Are you sure you want to delete this quiz?")) return;
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/quiz/${quizId}`, {
+      const res = await fetch(`${API_URL}/api/admin/quiz/${quizId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${user.token}` },
       });

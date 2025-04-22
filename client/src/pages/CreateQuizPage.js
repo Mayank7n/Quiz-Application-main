@@ -73,7 +73,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../styles/createQuiz.css";
 
-const API_URL = "https://quiz-application-main.onrender.com";
+import API_URL from '../config';
 
 const CreateQuizPage = () => {
   const { user } = useAuth();
