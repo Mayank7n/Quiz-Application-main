@@ -22,7 +22,7 @@ const SignupPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://quiz-application-main-5njxup0m1-mayank7ns-projects.vercel.app/api/auth/signup", formData);
+      const res = await axios.post("https://quiz-application-main-alpha.vercel.app/api/auth/signup", formData);
       alert(res.data.message); // Show success message
       navigate("/login"); // Redirect to login
     } catch (err) {
