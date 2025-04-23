@@ -28,7 +28,8 @@ app.use(cors({
     const allowedOrigins = [
       'https://quiz-application-main-4qxj.vercel.app',
       'http://localhost:3000',
-      "https://quiz-application-main-5njxup0m1-mayank7ns-projects.vercel.app"
+      "https://quiz-application-main-5njxup0m1-mayank7ns-projects.vercel.app",
+      "https://quiz-application-main-alpha.vercel.app"
     ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
