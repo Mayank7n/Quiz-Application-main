@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import "../styles/attemptQuiz.css";
 
-const API_URL = "https://quiz-application-main-5njxup0m1-mayank7ns-projects.vercel.app/api";
+const API_URL = "https://quiz-application-main-alpha.vercel.app/api";
 
 const AttemptQuiz = () => {
   // Timer state
