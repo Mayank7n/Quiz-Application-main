@@ -73,7 +73,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../styles/createQuiz.css";
 
-import API_URL from '../config';
+const API_URL = "http://localhost:5000/api";
 
 const CreateQuizPage = () => {
   const { user } = useAuth();
@@ -148,7 +148,7 @@ const CreateQuizPage = () => {
         timeLimit: timeLimit ? Number(timeLimit) : undefined,
       };
 
-      const response = await fetch(`${API_URL}/api/quiz/create`, {
+      const response = await fetch(`${API_URL}/quiz/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -157,11 +157,6 @@ const CreateQuizPage = () => {
         body: JSON.stringify(quizData),
       });
 
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await response.text();
-        throw new Error(`Expected JSON, got: ${text}`);
-      }
       const data = await response.json();
 
       if (!response.ok) {

@@ -1,4 +1,3 @@
-import API_URL from '../config';
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Clock, Users, Shield } from "lucide-react";
@@ -21,7 +20,7 @@ const popVariants = {
   }),
 };
 
-
+const API_URL = "http://localhost:5000/api";
 
 const Home = () => {
   const { user } = useAuth();
@@ -44,18 +43,10 @@ const Home = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_URL}/api/admin/quizzes`, {
+      const res = await fetch(`${API_URL}/admin/quizzes`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Failed to fetch quizzes: ${text}`);
-      }
-      const contentType = res.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await res.text();
-        throw new Error(`Expected JSON, got: ${text}`);
-      }
+      if (!res.ok) throw new Error("Failed to fetch quizzes");
       const data = await res.json();
       setQuizzes(data);
       // Fetch attempt counts for each quiz

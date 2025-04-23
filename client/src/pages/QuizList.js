@@ -1,11 +1,10 @@
-import API_URL from '../config';
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import "../styles/quizList.css";
 
-
+const API_URL = "http://localhost:5000/api";
 
 const QuizList = () => {
   const { user } = useAuth();
@@ -43,7 +42,7 @@ const QuizList = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_URL}/api/admin/quizzes`, {
+      const res = await fetch('http://localhost:5000/api/admin/quizzes', {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -64,14 +63,14 @@ const QuizList = () => {
   const fetchAllQuizzes = async () => {
     try {
       // Fetch available quizzes
-      const availableResponse = await fetch(`${API_URL}/api/quiz/all`, {
+      const availableResponse = await fetch(`${API_URL}/quiz/all`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       });
 
       // Fetch attempted quizzes
-      const attemptedResponse = await fetch(`${API_URL}/api/quiz/attempted`, {
+      const attemptedResponse = await fetch(`${API_URL}/quiz/attempted`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -83,17 +82,7 @@ const QuizList = () => {
         const attemptedError = await attemptedResponse.text();
         throw new Error(`Failed to fetch quizzes: ${availableError} - ${attemptedError}`);
       }
-      // Defensive content-type check for available quizzes
-      const availableContentType = availableResponse.headers.get("content-type");
-      if (!availableContentType || !availableContentType.includes("application/json")) {
-        const text = await availableResponse.text();
-        throw new Error(`Expected JSON for available quizzes, got: ${text}`);
-      }
-      const attemptedContentType = attemptedResponse.headers.get("content-type");
-      if (!attemptedContentType || !attemptedContentType.includes("application/json")) {
-        const text = await attemptedResponse.text();
-        throw new Error(`Expected JSON for attempted quizzes, got: ${text}`);
-      }
+
       const availableData = await availableResponse.json();
       const attemptedData = await attemptedResponse.json();
 
@@ -143,7 +132,7 @@ const QuizList = () => {
                       onClick={async () => {
                         if (!window.confirm('Are you sure you want to delete this quiz?')) return;
                         try {
-                          const res = await fetch(`${API_URL}/api/admin/quiz/${quiz._id}`, {
+                          const res = await fetch(`http://localhost:5000/api/admin/quiz/${quiz._id}`, {
                             method: 'DELETE',
                             headers: { Authorization: `Bearer ${user.token}` },
                           });

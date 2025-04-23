@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import "../styles/attemptQuiz.css";
 
-import API_URL from '../config';
+const API_URL = "http://localhost:5000/api";
 
 const AttemptQuiz = () => {
   // Timer state
@@ -78,7 +78,6 @@ const AttemptQuiz = () => {
       setTerminationReason("Quiz terminated: Copying or cheating detected.");
       setScore(0);
       // Mark quiz as terminated for this user in backend
-
       fetch(`${API_URL}/quiz/terminate/${id}`, {
         method: "POST",
         headers: {
@@ -151,11 +150,6 @@ const AttemptQuiz = () => {
         throw new Error("Failed to fetch quiz");
       }
 
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await response.text();
-        throw new Error(`Expected JSON, got: ${text}`);
-      }
       const data = await response.json();
       setQuiz(data);
       setAnswers(new Array(data.questions.length).fill(null));

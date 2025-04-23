@@ -1,9 +1,8 @@
-import API_URL from '../config';
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-
+const API_URL = "http://localhost:5000/api";
 
 const AdminPanel = () => {
   const { user } = useAuth();
@@ -29,36 +28,19 @@ const AdminPanel = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${API_URL}/api/admin/quizzes`, {
+      const res = await fetch(`${API_URL}/admin/quizzes`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Failed to fetch quizzes: ${text}`);
-      }
-      const contentType = res.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await res.text();
-        throw new Error(`Expected JSON, got: ${text}`);
-      }
+      if (!res.ok) throw new Error("Failed to fetch quizzes");
       const data = await res.json();
       setQuizzes(data);
       // Fetch attempt counts for each quiz
       const counts = {};
       await Promise.all(
         data.map(async (quiz) => {
-          const resp = await fetch(`${API_URL}/api/admin/quiz/${quiz._id}/attempts`, {
+          const resp = await fetch(`${API_URL}/admin/quiz/${quiz._id}/attempts`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
-          if (!resp.ok) {
-            const text = await resp.text();
-            throw new Error(`Failed to fetch attempts for quiz ${quiz._id}: ${text}`);
-          }
-          const attemptContentType = resp.headers.get("content-type");
-          if (!attemptContentType || !attemptContentType.includes("application/json")) {
-            const text = await resp.text();
-            throw new Error(`Expected JSON for attempts of quiz ${quiz._id}, got: ${text}`);
-          }
           const result = await resp.json();
           counts[quiz._id] = result.count || 0;
         })
@@ -74,7 +56,7 @@ const AdminPanel = () => {
   const handleDeleteQuiz = async (quizId) => {
     if (!window.confirm("Are you sure you want to delete this quiz?")) return;
     try {
-      const res = await fetch(`${API_URL}/api/admin/quiz/${quizId}`, {
+      const res = await fetch(`${API_URL}/admin/quiz/${quizId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${user.token}` },
       });
