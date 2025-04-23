@@ -73,7 +73,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../styles/createQuiz.css";
 
-const API_URL = "https://quiz-application-main-5njxup0m1-mayank7ns-projects.vercel.app/api";
+const API_URL = "htthttps://quiz-application-main-alpha.vercel.app/api";
 
 const CreateQuizPage = () => {
   const { user } = useAuth();
