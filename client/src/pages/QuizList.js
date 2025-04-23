@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 import "../styles/quizList.css";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://quiz-application-main-alpha.vercel.app/api";
 
 const QuizList = () => {
   const { user } = useAuth();
@@ -132,7 +132,7 @@ const QuizList = () => {
                       onClick={async () => {
                         if (!window.confirm('Are you sure you want to delete this quiz?')) return;
                         try {
-                          const res = await fetch(`http://localhost:5000/api/admin/quiz/${quiz._id}`, {
+                          const res = await fetch(`https://quiz-application-main-alpha.vercel.app/api/admin/quiz/${quiz._id}`, {
                             method: 'DELETE',
                             headers: { Authorization: `Bearer ${user.token}` },
                           });
