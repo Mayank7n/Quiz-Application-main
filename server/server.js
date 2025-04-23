@@ -23,7 +23,13 @@ const cors = require("cors");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://quiz-application-main-4qxj.vercel.app',
+    'http://localhost:3000'
+  ],
+  credentials: true
+}));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
