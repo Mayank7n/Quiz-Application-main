@@ -20,7 +20,7 @@ const popVariants = {
   }),
 };
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://quiz-application-main-5njxup0m1-mayank7ns-projects.vercel.app/api";
 
 const Home = () => {
   const { user } = useAuth();

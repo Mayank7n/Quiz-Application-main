@@ -42,7 +42,7 @@ const QuizList = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch('http://localhost:5000/api/admin/quizzes', {
+      const res = await fetch('https://quiz-application-main-5njxup0m1-mayank7ns-projects.vercel.app/api/admin/quizzes', {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },

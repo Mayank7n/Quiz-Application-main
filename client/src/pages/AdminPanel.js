@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://quiz-application-main-5njxup0m1-mayank7ns-projects.vercel.app/api";
 
 const AdminPanel = () => {
   const { user } = useAuth();
