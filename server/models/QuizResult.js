@@ -23,6 +23,17 @@ const quizResultSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  terminated: {
+    type: Boolean,
+    default: false,
+  },
+  terminatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  terminatedAt: {
+    type: Date,
+  },
 });
 
 module.exports = mongoose.model("QuizResult", quizResultSchema);

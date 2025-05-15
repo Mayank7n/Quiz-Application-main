@@ -28,6 +28,36 @@ router.get("/quiz/:id/attempts", verifyAdmin, async (req, res) => {
   }
 });
 
+// Get detailed user attempts for a quiz
+router.get("/quiz/:id/user-attempts", verifyAdmin, async (req, res) => {
+  try {
+    const quizId = req.params.id;
+    console.log(`Fetching attempts for quiz: ${quizId}`);
+    
+    // Verify the quiz exists and belongs to the admin
+    const quiz = await Quiz.findOne({ _id: quizId, createdBy: req.user.id });
+    if (!quiz) {
+      console.log(`Quiz not found or not authorized: ${quizId}`);
+      return res.status(404).json({ message: "Quiz not found or not authorized" });
+    }
+    
+    const attempts = await QuizResult.find({ quiz: quizId })
+      .populate('user', 'name email')
+      .select('user score completedAt terminated')
+      .sort({ completedAt: -1 });
+    
+    console.log(`Found ${attempts.length} attempts for quiz: ${quizId}`);
+    res.json(attempts);
+  } catch (error) {
+    console.error("Admin Get User Attempts Error:", error);
+    res.status(500).json({ 
+      message: "Server error", 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
+});
+
 // Delete quiz (already exists in quizRoutes, but for admin panel convenience)
 router.delete("/quiz/:id", verifyAdmin, async (req, res) => {
   try {

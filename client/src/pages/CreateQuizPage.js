@@ -1,73 +1,3 @@
-// import React, { useState } from "react";
-// import "../styles/createQuiz.css";
-
-// const CreateQuizPage = () => {
-//   const [quizTitle, setQuizTitle] = useState("");
-//   const [quizDesc, setQuizDesc] = useState("");
-//   const [questions, setQuestions] = useState([{ question: "", options: ["", "", "", ""], correctAnswer: 0 }]);
-
-//   const handleQuestionChange = (index, field, value) => {
-//     const updatedQuestions = [...questions];
-//     if (field === "question") {
-//       updatedQuestions[index].question = value;
-//     } else {
-//       updatedQuestions[index].options[field] = value;
-//     }
-//     setQuestions(updatedQuestions);
-//   };
-
-//   const handleCorrectAnswerChange = (index, value) => {
-//     const updatedQuestions = [...questions];
-//     updatedQuestions[index].correctAnswer = parseInt(value);
-//     setQuestions(updatedQuestions);
-//   };
-//           type="text"
-//           placeholder="Quiz Title"
-//           value={quizTitle}
-//           onChange={(e) => setQuizTitle(e.target.value)}
-//         />
-//         <textarea
-//           placeholder="Quiz Description"
-//           value={quizDesc}
-//           onChange={(e) => setQuizDesc(e.target.value)}
-//         />
-
-//         {questions.map((q, index) => (
-//           <div key={index} className="question-block">
-//             <input
-//               type="text"
-//               placeholder={`Question ${index + 1}`}
-//               value={q.question}
-//               onChange={(e) => handleQuestionChange(index, "question", e.target.value)}
-//             />
-//             {q.options.map((opt, optIndex) => (
-//               <input
-//                 key={optIndex}
-//                 type="text"
-//                 placeholder={`Option ${optIndex + 1}`}
-//                 value={opt}
-//                 onChange={(e) => handleQuestionChange(index, optIndex, e.target.value)}
-//               />
-//             ))}
-//             <select
-//               value={q.correctAnswer}
-//               onChange={(e) => handleCorrectAnswerChange(index, e.target.value)}
-//             >
-//               {q.options.map((_, idx) => (
-//                 <option key={idx} value={idx}>Correct: Option {idx + 1}</option>
-//               ))}
-//             </select>
-//           </div>
-//         ))}
-
-//         <button type="button" onClick={addQuestion}>+ Add Question</button>
-//         <button type="submit">Create Quiz</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default CreateQuizPage;
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -96,6 +26,7 @@ const CreateQuizPage = () => {
     setQuestions(updatedQuestions);
   };
 
+
   const handleCorrectAnswerChange = (index, value) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index].correctAnswer = parseInt(value);
@@ -108,6 +39,7 @@ const CreateQuizPage = () => {
       { question: "", options: ["", "", "", ""], correctAnswer: 0 },
     ]);
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -206,6 +138,7 @@ const CreateQuizPage = () => {
               rows={3}
               style={{ width: '100%', resize: 'vertical' }}
             />
+
             {q.options.map((opt, optIndex) => (
               <input
                 key={optIndex}

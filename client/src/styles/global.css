@@ -55,6 +55,33 @@ body {
   padding: clamp(1rem, 3vw, 2rem);
 }
 
+/* Responsive Container Breakpoints */
+@media (max-width: 1200px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 540px;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+}
+
 /* Typography */
 h1 {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
@@ -70,6 +97,43 @@ h3 {
 
 p {
   font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+/* Typography Responsiveness */
+@media (max-width: 768px) {
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.2rem, 3.5vw, 1.75rem);
+  }
+  
+  h3 {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+  }
+  
+  p {
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: clamp(1.2rem, 4vw, 1.75rem);
+  }
+  
+  h2 {
+    font-size: clamp(1rem, 3.5vw, 1.5rem);
+  }
+  
+  h3 {
+    font-size: clamp(0.9rem, 3vw, 1.25rem);
+  }
+  
+  p {
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+  }
 }
 
 /* Buttons */
@@ -91,12 +155,22 @@ p {
   letter-spacing: 0.5px;
   box-shadow: var(--box-shadow);
   gap: 0.5rem;
+  min-width: 120px;
 }
 
 .btn:hover {
   background-color: var(--primary-dark);
   transform: translateY(-2px);
   box-shadow: var(--box-shadow-md);
+}
+
+/* Button Responsiveness */
+@media (max-width: 480px) {
+  .btn {
+    padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1.2rem, 3vw, 1.6rem);
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    min-width: 100px;
+  }
 }
 
 .btn:active {

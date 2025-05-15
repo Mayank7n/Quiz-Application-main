@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { Container, Row, Col, Card, Button, Spinner, Badge, Modal } from "react-bootstrap";
+import { TbTrophy, TbMedal, TbUser, TbArrowBack } from "react-icons/tb";
 import "../styles/ranking.css";
 
 const API_URL = "https://quiz-application-main-alpha.vercel.app/api";
@@ -68,79 +70,203 @@ const Ranking = () => {
   };
 
   return (
-    <div className="ranking-container">
-      <h1 className="ranking-title">Quiz Rankings</h1>
+    <Container className="ranking-container py-5">
+      <h1 className="text-center mb-5">
+        <TbTrophy className="me-2" style={{ color: '#ffd700' }} />
+        Quiz Rankings
+      </h1>
+      
       {loading ? (
-        <p>Loading quizzes...</p>
+        <div className="text-center my-5">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-2">Loading quizzes...</p>
+        </div>
       ) : error ? (
-        <p style={{ color: "#c0392b" }}>{error}</p>
+        <div className="alert alert-danger text-center">{error}</div>
       ) : quizzes.length === 0 ? (
-        <p>No quizzes found.</p>
-      ) : (
-        !showLeaderboard && (
-          <div className="quiz-grid">
-            {[...new Map(
-              quizzes
-                .filter(q => q && q._id && q.title) // Only valid, attempted quizzes
-                .map(q => [q._id, q])
-            ).values()].map((quiz) => (
-              <div className="quiz-card" key={quiz._id}>
-                <h2>{quiz.title}</h2>
-                <button className="auth-btn" onClick={() => openLeaderboard(quiz._id, quiz.title)}>
-                  Leaderboard
-                </button>
+        <div className="text-center my-5">
+          <p className="lead">No quiz attempts found.</p>
+          <p>Complete some quizzes to see your rankings!</p>
+        </div>
+      ) : !showLeaderboard ? (
+        <div className="quiz-sections">
+          {[...new Map(
+            quizzes
+              .filter(q => q && q._id && q.title)
+              .map(q => [q._id, q])
+          ).values()].map((quiz, index) => (
+            <section key={quiz._id} className="quiz-section">
+              <div className="quiz-section-header">
+                <h3 className="quiz-section-title">
+                  <TbTrophy className="me-2" />
+                  {quiz.title}
+                </h3>
+                <Button 
+                  variant="outline-dark" 
+                  size="sm"
+                  onClick={() => openLeaderboard(quiz._id, quiz.title)}
+                  className="ms-auto"
+                >
+                  View Leaderboard
+                </Button>
               </div>
-            ))}
-          </div>
-        )
-      )}
+              
+              <div className="quiz-section-content">
+                {leaderboardLoading && quiz._id === showLeaderboard?.quizId ? (
+                  <div className="text-center py-4">
+                    <Spinner animation="border" size="sm" className="me-2" />
+                    Loading leaderboard...
+                  </div>
+                ) : leaderboardData && showLeaderboard?.quizId === quiz._id ? (
+                  <div className="leaderboard-preview">
+                    {leaderboardData.leaderboard.slice(0, 3).map((entry, idx) => (
+                      <div key={entry.email} className="leaderboard-preview-item">
+                        <div className="d-flex align-items-center">
+                          <span className="leaderboard-rank">
+                            {idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'}
+                          </span>
+                          <span className="ms-2">
+                            {entry.name}
+                            {leaderboardData.userRank?.email === entry.email && (
+                              <Badge bg="primary" className="ms-2">You</Badge>
+                            )}
+                          </span>
+                          <span className="ms-auto fw-bold">{Math.floor(entry.score)}</span>
+                        </div>
+                      </div>
+                    ))}
+                    {leaderboardData.userRank && !leaderboardData.leaderboard.some(e => e.email === leaderboardData.userRank.email) && (
+                      <div className="leaderboard-preview-item user-rank">
+                        <div className="d-flex align-items-center">
+                          <span className="leaderboard-rank">
+                            #{leaderboardData.userRank.rank}
+                          </span>
+                          <span className="ms-2">
+                            {leaderboardData.userRank.name}
+                            <Badge bg="primary" className="ms-2">You</Badge>
+                          </span>
+                          <span className="ms-auto fw-bold">{Math.floor(leaderboardData.userRank.score)}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : null}
 
-      {/* Leaderboard Modal - full page overlay */}
-      {showLeaderboard && (
-        <div className="leaderboard-modal leaderboard-fullpage">
-          <button className="leaderboard-close" onClick={closeLeaderboard}>Hide Leaderboard</button>
-          <h2 className="leaderboard-title">Leaderboard - {showLeaderboard.quizTitle}</h2>
+      {/* Leaderboard Modal */}
+      <Modal 
+        show={!!showLeaderboard} 
+        onHide={closeLeaderboard}
+        size="lg"
+        centered
+        className="leaderboard-modal"
+      >
+        <Modal.Header closeButton className="border-0 pb-0">
+          <Modal.Title className="w-100 text-center">
+            <h4 className="mb-0">
+              <TbTrophy className="me-2" style={{ color: '#ffd700' }} />
+              {showLeaderboard?.quizTitle}
+            </h4>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
           {leaderboardLoading ? (
-            <p>Loading leaderboard...</p>
+            <div className="text-center my-5">
+              <Spinner animation="border" variant="primary" />
+              <p className="mt-2">Loading leaderboard...</p>
+            </div>
           ) : leaderboardError ? (
-            <p style={{ color: "#c0392b" }}>{leaderboardError}</p>
+            <div className="alert alert-danger">{leaderboardError}</div>
           ) : leaderboardData ? (
-            <>
-              {/* User's rank at the top if present */}
+            <div>
+              {/* User's rank highlight */}
               {leaderboardData.userRank ? (
-                <div className="user-rank-highlight" style={{ marginBottom: 10 }}>
-                  <span>Your Rank: <b>{leaderboardData.userRank.rank}</b></span> | 
-                  <span>Score: <b>{leaderboardData.userRank.score}</b></span>
+                <div className="bg-light p-3 rounded-3 mb-4 shadow-sm">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 className="mb-1">Your Ranking</h5>
+                      <div className="d-flex align-items-center">
+                        <Badge bg="primary" className="me-2 fs-6">
+                          #{leaderboardData.userRank.rank}
+                        </Badge>
+                        <span className="fw-bold">{leaderboardData.userRank.name}</span>
+                      </div>
+                    </div>
+                    <div className="text-end">
+                      <div className="text-muted small">Score</div>
+                      <div className="h4 mb-0 fw-bold text-primary">
+                        {Math.floor(leaderboardData.userRank.score)}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <div className="user-rank-highlight" style={{ background: "#ffe1e1", color: "#888" }}>
+                <div className="alert alert-info">
                   You have not attempted this quiz yet.
                 </div>
               )}
-              <ul className="leaderboard-list">
-                {/* Show logged-in user at the top, then others */}
-                {leaderboardData.userRank && (
-                  <li key={leaderboardData.userRank.email + '-user'} style={{ background: '#fcecec', fontWeight: 'bold' }}>
-                    <span className="rank-badge">{leaderboardData.userRank.rank}</span>
-                    <span>{leaderboardData.userRank.name} (You)</span>
-                    <span style={{ marginLeft: "auto", fontWeight: 600,}}>{leaderboardData.userRank.score}</span>
-                  </li>
-                )}
-                {leaderboardData.leaderboard
-                  .filter(entry => !leaderboardData.userRank || entry.email !== leaderboardData.userRank.email)
-                  .map((entry) => (
-                    <li key={entry.email + entry.rank}>
-                      <span className="rank-badge">{entry.rank}</span>
-                      <span>{entry.name}</span>
-                      <span style={{ marginLeft: "auto", fontWeight: 600 }}>{entry.score}</span>
-                    </li>
-                  ))}
-              </ul>
-            </>
+
+              {/* Leaderboard */}
+              <div className="leaderboard-container">
+                <h5 className="mb-3 text-muted">Top Performers</h5>
+                <div className="list-group">
+                  {leaderboardData.leaderboard.map((entry, index) => {
+                    const isCurrentUser = leaderboardData.userRank?.email === entry.email;
+                    let rankClass = '';
+                    
+                    if (index === 0) rankClass = 'bg-warning bg-opacity-10';
+                    else if (index === 1) rankClass = 'bg-secondary bg-opacity-10';
+                    else if (index === 2) rankClass = 'bg-danger bg-opacity-10';
+                    
+                    return (
+                      <div 
+                        key={entry.email} 
+                        className={`list-group-item list-group-item-action border-0 rounded-3 mb-2 d-flex align-items-center ${rankClass} ${isCurrentUser ? 'border border-primary' : ''}`}
+                      >
+                        <div className="d-flex align-items-center w-100">
+                          <div className="position-relative me-3">
+                            {index < 3 ? (
+                              <TbMedal 
+                                size={24} 
+                                className={index === 0 ? 'text-warning' : index === 1 ? 'text-secondary' : 'text-danger'}
+                              />
+                            ) : (
+                              <Badge bg="light" text="dark" className="rank-badge">
+                                {index + 1}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="d-flex justify-content-between w-100 align-items-center">
+                            <div>
+                              <span className="fw-medium">{entry.name}</span>
+                              {isCurrentUser && (
+                                <Badge bg="primary" className="ms-2">You</Badge>
+                              )}
+                            </div>
+                            <div className="text-end">
+                              <div className="fw-bold">{Math.floor(entry.score)}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           ) : null}
-        </div>
-      )}
-    </div>
+        </Modal.Body>
+        <Modal.Footer className="border-0 pt-0">
+          <Button variant="outline-secondary" onClick={closeLeaderboard}>
+            <TbArrowBack className="me-1" /> Back to Quizzes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Container>
   );
 };
 

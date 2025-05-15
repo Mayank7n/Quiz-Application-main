@@ -1,0 +1,25 @@
+{
+  "name": "quiz-application",
+  "version": "1.0.0",
+  "description": "Full-stack Quiz Application",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"cd server && npm start\" \"cd client && npm start\"",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build"
+  },
+  "keywords": [
+    "quiz",
+    "react",
+    "node",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "react-icons": "^5.5.0"
+  }
+}

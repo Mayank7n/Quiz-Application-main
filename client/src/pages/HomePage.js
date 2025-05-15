@@ -1,29 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { BookOpen, Clock, Users, Shield } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { 
+  Container, 
+  Row, 
+  Col, 
+  Button, 
+  Spinner, 
+  Alert,
+  Navbar,
+  Nav,
+  Badge,
+  Card
+} from "react-bootstrap";
+import { 
+  BookOpen, 
+  Clock, 
+  Users, 
+  Shield, 
+  PlusCircle, 
+  BarChart2,
+  Award,
+  CheckCircle,
+  ArrowRight,
+  PlayCircle,
+  Trash2
+} from "react-feather";
 import "../styles/home.css";
-
-const popVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 30 },
-  visible: (i) => ({
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.3,
-      type: "spring",
-      stiffness: 300,
-      damping: 20,
-    },
-  }),
-};
 
 const API_URL = "https://quiz-application-main-alpha.vercel.app/api";
 
 const Home = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +44,6 @@ const Home = () => {
     } else {
       setLoading(false);
     }
-    // eslint-disable-next-line
   }, [user]);
 
   const fetchQuizzes = async () => {
@@ -49,6 +56,7 @@ const Home = () => {
       if (!res.ok) throw new Error("Failed to fetch quizzes");
       const data = await res.json();
       setQuizzes(data);
+      
       // Fetch attempt counts for each quiz
       const counts = {};
       await Promise.all(
@@ -77,7 +85,6 @@ const Home = () => {
       });
       if (!res.ok) throw new Error("Failed to delete quiz");
       setQuizzes(quizzes.filter((q) => q._id !== quizId));
-      // Remove attempt count for deleted quiz
       const newCounts = { ...attemptCounts };
       delete newCounts[quizId];
       setAttemptCounts(newCounts);
@@ -90,91 +97,123 @@ const Home = () => {
     navigate("/create-quiz");
   };
 
+  const featureCards = [
+    {
+      icon: <BookOpen size={40} className="text-primary mb-3" />,
+      title: "Wide Variety of Quizzes",
+      description: "Choose from multiple categories and challenge yourself."
+    },
+    {
+      icon: <Clock size={40} className="text-warning mb-3" />,
+      title: "Time-Based Challenges",
+      description: "Test your speed and accuracy with timed quizzes."
+    },
+    {
+      icon: <Users size={40} className="text-success mb-3" />,
+      title: "Compete with Friends",
+      description: "Compare scores and climb the leaderboard."
+    },
+    {
+      icon: <Shield size={40} className="text-info mb-3" />,
+      title: "Secure & Fair",
+      description: "Ensuring a cheat-free and fair quiz experience."
+    }
+  ];
+
   return (
-    <div className="home-container">
-      <motion.h1
-        className="hero-title"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        Welcome to <span>Quiz Portal</span>
-        </motion.h1>
+    <div className="home-page">
+      <div className="page-content">
 
-      {/* Static Info Cards Section */}
-      <div className="cards-container">
-        <motion.div className="card" whileHover={{ scale: 1.05 }}>
-          <BookOpen size={40} />
-          <h3>Wide Variety of Quizzes</h3>
-          <p>Choose from multiple categories and challenge yourself.</p>
-        </motion.div>
-
-        <motion.div className="card" whileHover={{ scale: 1.05 }}>
-          <Clock size={40} />
-          <h3>Time-Based Challenges</h3>
-          <p>Test your speed and accuracy with timed quizzes.</p>
-        </motion.div>
-
-        <motion.div className="card" whileHover={{ scale: 1.05 }}>
-          <Users size={40} />
-          <h3>Compete with Friends</h3>
-          <p>Compare scores and climb the leaderboard.</p>
-        </motion.div>
-
-        <motion.div className="card" whileHover={{ scale: 1.05 }}>
-          <Shield size={40} />
-          <h3>Secure & Fair</h3>
-          <p>Ensuring a cheat-free and fair quiz experience.</p>
-        </motion.div>
-      </div>
-      {user && (
-        <motion.h2
-          className="user-name floating"
-          variants={popVariants}
-          initial="hidden"
-          animate="visible"
-          custom={1}
-        >
-          {user.name && user.name.trim() !== "" ? user.name : (user.email ? user.email : "User")}
-        </motion.h2>
-      )}
-      {/* Admin Panel Section */}
-      {user && user.role === "admin" && (
-        <div className="admin-panel-container" style={{marginTop: 40}}>
-          <h1 className="admin-title">Admin Panel</h1>
-          <button className="auth-btn" style={{marginBottom: 24, background: '#c0392b', color: '#fff', fontWeight: 600, fontSize: '1rem'}} onClick={handleCreateQuiz}>
-            + Create Quiz
-          </button>
-          {loading ? (
-            <div className="admin-container"><h2>Loading...</h2></div>
-          ) : (
-            <>
-              {error && <div className="error-message">{error}</div>}
-              <div className="cards-container">
-                {quizzes.length === 0 ? (
-                  <div>No quizzes created yet.</div>
-                ) : (
-                  quizzes.map((quiz) => (
-                    <div className="card" key={quiz._id}>
-                      <h2>{quiz.title}</h2>
-                      <button
-                        className="btn delete-btn"
-                        onClick={() => handleDeleteQuiz(quiz._id)}
-                        style={{ margin: "10px 0", background: "#e74c3c", color: "#fff" }}
-                      >
-                        Delete Quiz
-                      </button>
-                      <div className="attempt-count" style={{ marginTop: "10px", fontWeight: "bold" }}>
-                        Users Attempted: {attemptCounts[quiz._id] ?? 0}
-                      </div>
-                    </div>
-                  ))
-                )}
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-overlay"></div>
+        <Container className="hero-content">
+          <Row className="align-items-center min-vh-75 py-5">
+            <Col lg={6} className="text-center text-lg-start mb-5 mb-lg-0">
+              <Badge bg="primary" className="mb-3 px-3 py-2 rounded-pill">
+                <Award size={18} className="me-2" /> #1 Quiz Platform
+              </Badge>
+              <h1 className="display-3 fw-bold mb-4">Test Your Knowledge with Our Interactive Quizzes</h1>
+              <p className="lead mb-4">Challenge yourself, learn new things, and track your progress with our engaging quiz platform.</p>
+              <div className="d-flex gap-3 justify-content-center justify-content-lg-start">
+                <Button size="lg" className="px-4" href={user ? "/quizzes" : "/signup"}>
+                  <PlayCircle size={20} className="me-2" />
+                  Start Quizzing
+                </Button>
+                <Button variant="outline-light" size="lg" className="px-4" href="#features">
+                  Learn More
+                </Button>
               </div>
-            </>
-          )}
-        </div>
-      )}
+            </Col>
+            <Col lg={6} className="text-center">
+              <div className="hero-illustration">
+                <BookOpen size={120} className="text-primary mb-3" />
+                <div className="floating-icon" style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '40px',
+                  animation: 'float 3s ease-in-out infinite'
+                }}>
+                  <CheckCircle size={32} className="text-success" />
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-5 bg-light">
+        <Container className="py-5">
+          <div className="text-center mb-5">
+            <h2 className="display-5 fw-bold mb-3">Why Choose QuizMaster?</h2>
+            <p className="lead text-muted">Discover the features that make our platform the best choice for your learning journey</p>
+          </div>
+          <Row className="g-4">
+            <Col md={4} className="feature-item">
+              <div className="p-4 h-100">
+                <div className="feature-icon mb-4">
+                  <BookOpen size={40} className="text-primary" />
+                </div>
+                <h3 className="h4 mb-3">Diverse Topics</h3>
+                <p className="text-muted mb-0">
+                  Explore a wide range of subjects from science to pop culture. Our quizzes are designed to challenge and educate.
+                </p>
+              </div>
+            </Col>
+            <Col md={4} className="feature-item">
+              <div className="p-4 h-100">
+                <div className="feature-icon mb-4">
+                  <BarChart2 size={40} className="text-primary" />
+                </div>
+                <h3 className="h4 mb-3">Track Progress</h3>
+                <p className="text-muted mb-0">
+                  Monitor your improvement with detailed analytics and performance reports. See how you stack up against others.
+                </p>
+              </div>
+            </Col>
+            <Col md={4} className="feature-item">
+              <div className="p-4 h-100">
+                <div className="feature-icon mb-4">
+                  <Users size={40} className="text-primary" />
+                </div>
+                <h3 className="h4 mb-3">Compete</h3>
+                <p className="text-muted mb-0">
+                  Challenge your friends and compete on leaderboards. See who comes out on top in our weekly challenges.
+                </p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+      </div>
+      <footer className="py-3 text-center bg-light mt-5">
+        <Container>
+          <p className="mb-0">
+            &copy; {new Date().getFullYear()} Mayank Sharma. All rights reserved.
+          </p>
+        </Container>
+      </footer>
     </div>
   );
 };

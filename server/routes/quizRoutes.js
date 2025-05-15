@@ -30,44 +30,48 @@ router.post("/create", verifyAdmin, async (req, res) => {
 
 
 
-// Get all unattempted quizzes for the user
+// Get all active quizzes
 // GET /api/quiz/all
 router.get("/all", verifyToken, async (req, res) => {
   try {
-    const User = require('../models/User');
-    // Find all quiz attempts by the user
+    // Find all quizzes
+    const quizzes = await Quiz.find({}).sort({ createdAt: -1 });
+    
+    // Find all quiz attempts by the current user
     const attempts = await QuizResult.find({ user: req.user.id }).select('quiz');
-    const attemptedQuizIds = attempts.map(attempt => attempt.quiz.toString());
-    const user = await User.findById(req.user.id);
-    const terminatedQuizIds = user.terminatedQuizzes.map(id => id.toString());
-    // Find all quizzes that haven't been attempted or terminated by the user
-    const quizzes = await Quiz.find({
-      _id: { $nin: [...attemptedQuizIds, ...terminatedQuizIds] }
-    }).sort({ createdAt: -1 });
-    res.json(quizzes);
+    const attemptedQuizIds = new Set(attempts.map(attempt => attempt.quiz.toString()));
+    
+    // Add attempted status to each quiz
+    const quizzesWithStatus = quizzes.map(quiz => ({
+      ...quiz.toObject(),
+      attempted: attemptedQuizIds.has(quiz._id.toString())
+    }));
+    
+    res.json(quizzesWithStatus);
   } catch (error) {
     console.error("Get Quizzes Error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// Get attempted quizzes with scores
+// Get all quizzes that the current user has attempted
 // GET /api/quiz/attempted
 router.get("/attempted", verifyToken, async (req, res) => {
   try {
-    const User = require('../models/User');
-    const user = await User.findById(req.user.id);
-    const terminatedQuizIds = user.terminatedQuizzes.map(id => id.toString());
+    // Find all quiz attempts by the current user
     const results = await QuizResult.find({ user: req.user.id })
       .populate('quiz', 'title questions') // Populate quiz details
       .sort({ completedAt: -1 });
+      
+    // Format the response
     const attemptedQuizzes = results
-      .filter(result => result.quiz && !terminatedQuizIds.includes(result.quiz._id.toString()))
+      .filter(result => result.quiz) // Only include results with valid quizzes
       .map(result => ({
         quiz: result.quiz,
         score: result.score,
         completedAt: result.completedAt
       }));
+      
     res.json(attemptedQuizzes);
   } catch (error) {
     console.error("Get Attempted Quizzes Error:", error);
@@ -165,14 +169,21 @@ router.post('/terminate/:quizId', verifyToken, async (req, res) => {
     const User = require('../models/User');
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Add the quiz to user's terminated quizzes
+    if (!user.terminatedQuizzes) {
+      user.terminatedQuizzes = [];
+    }
+    
     if (!user.terminatedQuizzes.includes(req.params.quizId)) {
       user.terminatedQuizzes.push(req.params.quizId);
       await user.save();
     }
-    res.json({ message: "Quiz terminated for user" });
+    
+    res.json({ message: 'Quiz terminated for user', userId: user._id });
   } catch (error) {
-    console.error("Terminate Quiz Error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Terminate Quiz Error:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
